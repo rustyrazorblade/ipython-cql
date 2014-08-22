@@ -9,6 +9,10 @@ Load the extension:
 Select a keyspace:
 
     %keyspace tutorial
+
+List tables:
+    
+    %tables
     
 Execute CQL Statements
 

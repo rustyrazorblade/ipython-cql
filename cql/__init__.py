@@ -39,3 +39,6 @@ class CQLMagic(Magics, Configurable):
         session.set_keyspace(line)
 
 
+    @line_magic("tables")
+    def get_tables(self, line, cell="", local_ns=None):
+        return cluster.metadata.keyspaces[session.keyspace].tables.keys()
