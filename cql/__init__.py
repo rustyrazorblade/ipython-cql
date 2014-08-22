@@ -27,6 +27,9 @@ class CQLMagic(Magics, Configurable):
     @cell_magic('cql')
     def execute(self, line, cell="", local_ns=None):
         global session
+
+        if cell:
+            line = cell
         result = session.execute(line)
         return result
 
