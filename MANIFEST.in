@@ -2,3 +2,5 @@
 setup.py
 cql/__init__.py
 cql/VERSION
+README.md
+LICENSE.txt
