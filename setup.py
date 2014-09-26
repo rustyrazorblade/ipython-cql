@@ -16,5 +16,5 @@ setup(
     author='jhaddad',
     author_email='jon@jonhaddad.com',
     description='IPython Extension for Cassandra integration',
-    install_requires=["cassandra-driver"]
+    install_requires=["cassandra-driver", "PrettyTable"]
 )
