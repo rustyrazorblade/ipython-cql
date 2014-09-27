@@ -29,31 +29,6 @@ def unload_ipython_extension(ipython):
     pass
 
 
-class CQLResult(object):
-    rows = None
-
-    def __init__(self, result):
-        self.rows = result
-
-    def get_table(self):
-        if not self.rows:
-            return "<p>No results</p>"
-
-        columns = self.rows[0].keys()
-        table = PrettyTable(columns)
-        for row in self.rows:
-            table.add_row(row.values())
-
-        return table
-
-    def _repr_html_(self):
-        table = self.get_table()
-        return table.get_html_string()
-
-    def __repr__(self):
-        table = self.get_table()
-        return table.get_string()
-
 class TablePrinter(object):
     def __init__(self, table):
         self.table = table
@@ -76,7 +51,16 @@ class CQLMagic(Magics, Configurable):
         if cell:
             line = cell
         result = session.execute(line)
-        return CQLResult(result)
+
+        if not result:
+            return "No results."
+
+        columns = result[0].keys()
+        table = PrettyTable(columns)
+        for row in result:
+            table.add_row(row.values())
+
+        return TablePrinter(table)
 
     @line_magic("keyspace")
     def set_keyspace(self, line, cell="", local_ns=None):
@@ -122,9 +106,14 @@ class CQLMagic(Magics, Configurable):
         #plt.xlabel('Smarts')
         #plt.ylabel('Probability')
         plt.title(r'$\mathrm{quick histogram}\ \mu=100,\ \sigma=15$')
-        plt.axis([40, 160, 0, .03])
+        plt.axis([0, 10, 0, .13])
         plt.grid(True)
         plt.show()
+
+    @line_magic("desc")
+    def describe(self, line, cell="", local_ns=None):
+        table = cluster.metadata.keyspaces[session.keyspace].tables[line]
+        print table.export_as_string()
 
 
     @line_magic("trace")
