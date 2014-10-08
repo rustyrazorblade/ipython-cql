@@ -84,10 +84,13 @@ class CQLMagic(Magics, Configurable):
         # return cluster.metadata.keyspaces[session.keyspace].tables.keys()
 
 
+    @cell_magic("histogram")
     @line_magic("histogram")
     def get_histogram(self, line, cell="", local_ns=None):
 
-
+        if cell:
+            line = cell
+        
         mu, sigma = 100, 15
 
         # the histogram of the data
